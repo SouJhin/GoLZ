@@ -25,7 +25,7 @@ type user struct {
 	Id   int    `db:"id"`
 	Name string `db:"name"`
 	Age  int    `db:"age"`
-}
+}1111
 
 func queryRowDemo() {
 	fmt.Printf("1 =====> 🚀🚀🚀 %v\n", 1)
