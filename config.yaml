@@ -5,15 +5,21 @@ app:
 log:
   level: "debug"
   filename: "web_app.log"
-  max_size: 100
+  max_size: 200
   max_age: 30
   max_backups: 7
 mysql:
   host: "127.0.0.1"
-  port: 13306
+  port: 3306
   user: "root"
   password: "mysql"
+  dbname: "sql_demo"
+  max_open_conns: 200
+  max_idle_conns: 50
 redis:
   user: "root"
+  host: "127.0.0.1"
   port: "6379"
   db: 0
+  password: ""
+  pool_size: 100
