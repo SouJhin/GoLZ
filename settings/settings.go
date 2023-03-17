@@ -48,7 +48,7 @@ type RedisConfig struct {
 func Init() (err error) {
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
-	viper.AddConfigPath("./conf/")
+	viper.AddConfigPath(".")
 	err = viper.ReadInConfig()
 	if err != nil {
 		fmt.Printf("err =====> 🚀🚀🚀 %v\n", err)

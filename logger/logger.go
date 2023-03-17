@@ -1,4 +1,4 @@
-package main
+package logger
 
 import (
 	"net"
@@ -16,7 +16,7 @@ import (
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
-func Init() {
+func Init() (err error) {
 	writeSyncer := getLogWriter(
 		viper.GetString("log.filename"),
 		viper.GetInt("log.max_size"),
@@ -25,14 +25,14 @@ func Init() {
 	)
 	encoder := getEncoder()
 	l := new(zapcore.Level)
-	err := l.UnmarshalText([]byte(viper.GetString("log.level")))
+	err = l.UnmarshalText([]byte(viper.GetString("log.level")))
 	if err != nil {
-		return
+		return err
 	}
 	core := zapcore.NewCore(encoder, writeSyncer, l)
 	lg := zap.New(core, zap.AddCaller())
 	zap.ReplaceGlobals(lg)
-	return
+	return err
 }
 
 func getEncoder() zapcore.Encoder {
