@@ -1,7 +1,10 @@
 app:
   name: "web_app"
-  mode: "dev"
+  version: "v0.0.1"
   port: "8801"
+  start_time: "2020-07-01"
+  machine_id: 1
+  mode: "dev"
 log:
   level: "debug"
   filename: "web_app.log"
@@ -10,12 +13,12 @@ log:
   max_backups: 7
 mysql:
   host: "127.0.0.1"
-  port: 3306
   user: "root"
   password: "mysql"
   dbname: "sql_test"
-  max_open_conns: 200
-  max_idle_conns: 50
+  port: 3306
+  max_open_cons: 200
+  max_idle_cons: 50
 redis:
   user: "root"
   host: "127.0.0.1"

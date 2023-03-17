@@ -11,9 +11,11 @@ var Conf = new(AppConfig)
 
 type AppConfig struct {
 	Name         string `mapstructure:"name"`
-	Mode         string `mapstructure:"mode"`
 	Version      string `mapstructure:"version"`
 	Port         int    `mapstructure:"port"`
+	StartTime    string `mapstructure:"start_time"`
+	MachineId    int64  `mapstructure:"machine_id"`
+	Mode         string `mapstructure:"mode"`
 	*LogConfig   `mapstructure:"log"`
 	*MySQLConfig `mapstructre:"mysql"`
 	*RedisConfig `mapstructure:"redis"`
@@ -28,26 +30,25 @@ type LogConfig struct {
 }
 
 type MySQLConfig struct {
-	Host         string `mapstructure:"host"`
-	User         string `mapstructure:"user"`
-	Password     string `mapstructure:"password"`
-	DbName       string `mapstructure:"db_name"`
-	Port         int    `mapstructure:"port"`
-	MaxOpenConns int    `mapstructure:"max_open_conns"`
-	MaxIdleConns int    `mapstructure:"max_idle_conns"`
+	Host           string `mapstructure:"host"`
+	User           string `mapstructure:"user"`
+	Password       string `mapstructure:"password"`
+	Db             string `mapstructure:"dbname"`
+	Port           int    `mapstructure:"port"`
+	MaxOpenConnect int    `mapstructure:"max_open_cons"`
+	MaxIdleConnect int    `mapstructure:"max_idle_cons"`
 }
 
 type RedisConfig struct {
 	Host     string `mapstructure:"host"`
-	Password string `mapstructure:"pasword"`
+	Password string `mapstructure:"password"`
 	Port     int    `mapstructure:"port"`
 	DB       int    `mapstructure:"db"`
 	PoolSize int    `mapstructure:"pool_size"`
 }
 
 func Init() (err error) {
-	viper.SetConfigName("config")
-	viper.SetConfigType("yaml")
+	viper.SetConfigFile("config.yaml")
 	viper.AddConfigPath(".")
 	err = viper.ReadInConfig()
 	if err != nil {

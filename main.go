@@ -9,9 +9,11 @@ import (
 	"syscall"
 	"time"
 
+	"server/controllers"
 	"server/dao/mysql"
 	"server/dao/redis"
 	"server/logger"
+	"server/pkg/snowflake"
 	"server/routes"
 	"server/settings"
 
@@ -28,7 +30,7 @@ func main() {
 		return
 	}
 	//初始化日志
-	if err := logger.Init(); err != nil {
+	if err := logger.Init(settings.Conf.LogConfig, "dev"); err != nil {
 		fmt.Printf("err =====> 🚀🚀32🚀 %v\n", err)
 		return
 	}
@@ -40,15 +42,21 @@ func main() {
 	}(zap.L())
 	zap.L().Debug("logger init success...")
 	//mysql
-	if err := mysql.InitDB(); err != nil {
+	if err := mysql.InitDB(settings.Conf.MySQLConfig); err != nil {
 		fmt.Printf("mysql init failed =====> 🚀🚀🚀 %v\n", err)
 	}
 	defer mysql.Close()
 	//redis
-	if err := redis.Init(); err != nil {
+	if err := redis.Init(settings.Conf.RedisConfig); err != nil {
 		fmt.Printf("mysql init failed =====> 🚀🚀🚀 %v\n", err)
 	}
 	defer redis.Close()
+	snowflake.Init(settings.Conf.StartTime, settings.Conf.MachineId)
+	//初始化校验器
+	if err := controllers.InitTrans("zh"); err != nil {
+		zap.L().Fatal("错误翻译初始化错误...")
+		return
+	}
 	//注册路由
 	r := routes.SetUp()
 	//启动服务

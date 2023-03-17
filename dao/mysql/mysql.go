@@ -3,15 +3,18 @@ package mysql
 import (
 	"fmt"
 
+	"server/settings"
+
+	"github.com/spf13/viper"
+
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
-	"github.com/spf13/viper"
 	"go.uber.org/zap"
 )
 
-var DB *sqlx.DB
+var db *sqlx.DB
 
-func InitDB() (err error) {
+func InitDB(cfg *settings.MySQLConfig) (err error) {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True",
 		viper.GetString("mysql.user"),
 		viper.GetString("mysql.password"),
@@ -19,16 +22,16 @@ func InitDB() (err error) {
 		viper.GetInt("mysql.port"),
 		viper.GetString("mysql.dbname"),
 	)
-	db, err := sqlx.Connect("mysql", dsn)
+	db, _ = sqlx.Connect("mysql", dsn)
 	if err != nil {
 		zap.L().Error("connect DB failed", zap.Error(err))
 		return err
 	}
-	db.SetMaxOpenConns(viper.GetInt("mysql.max_open_conns"))
-	db.SetMaxIdleConns(viper.GetInt("mysql.max_idle_conns"))
+	db.SetMaxOpenConns(viper.GetInt("mysql.max_open_cons"))
+	db.SetMaxIdleConns(viper.GetInt("mysql.max_idle_cons"))
 	return err
 }
 
 func Close() {
-	_ = DB.Close()
+	_ = db.Close()
 }
